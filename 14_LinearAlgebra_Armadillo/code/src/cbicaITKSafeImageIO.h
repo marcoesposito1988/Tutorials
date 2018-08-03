@@ -201,7 +201,7 @@ namespace cbica
       seriesReader->SetFileNames(fileNames);
       try
       {
-        seriesreader->Update();
+        seriesReader->Update();
       }
       catch (itk::ExceptionObject & err)
       {
