@@ -1791,7 +1791,7 @@ namespace cbica
 #if WIN32
     Sleep(static_cast<unsigned int>(ms));
 #else
-    struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
+    struct timespec ts = { (long)ms / 1000, ((long)ms % 1000) * 1000 * 1000 };
     nanosleep(&ts, NULL);
 #endif
   }

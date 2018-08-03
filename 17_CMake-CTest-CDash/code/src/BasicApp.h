@@ -19,8 +19,8 @@ public:
   //! Default Constructor
   BasicApp()
   {
-    m_inputImage = typename TImageType::New();
-    m_outputImage = typename TImageType::New();
+    m_inputImage = TImageType::New();
+    m_outputImage = TImageType::New();
   }
 
   //! Default Destructor
@@ -71,7 +71,7 @@ public:
       outputIterator.SetIndex(inputIterator.GetIndex());
 
       outputIterator.Set( // set a pixel value to the index pointed at by the outputIterator
-        static_cast<TImageType::PixelType>( // cast the result of the multiplication to the pixel type to circumvent errors
+        static_cast<typename TImageType::PixelType>( // cast the result of the multiplication to the pixel type to circumvent errors
         inputIterator.Get() * m_scaleFactor) // multiply input image pixel by the scale factor
         );
     }
