@@ -918,7 +918,7 @@ namespace cbica
 
 };
 
-#if defined(__GNUC__)  && (__GNUC__ < 5)
+#if defined(__GNUC__)  && (__GNUC__ < 5) && !defined(__clang__)
 namespace std
 {
   //! std::round wrap for GCC
@@ -970,7 +970,7 @@ namespace std
   inline int round(const unsigned int &input)
   {
     int returnValue;
-    const unsigned int inputWrap = abs(input);
+    const unsigned int inputWrap = std::abs(input);
     inputWrap >= floor(inputWrap) + 0.5 ? returnValue = ceil(inputWrap) : returnValue = floor(inputWrap);
 
     if (input < 0)
