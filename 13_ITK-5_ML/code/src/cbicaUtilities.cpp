@@ -40,6 +40,10 @@ static const char  cSeparator = '/';
 //  static const char* cSeparators = "/";
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>	/* _NSGetExecutablePath */
+#endif
+
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -648,19 +652,23 @@ namespace cbica
     filename[0] = '\0';
     //_splitpath_s(filename, NULL, NULL, NULL, NULL, filename, NULL, NULL, NULL);
 #else
+#ifdef __APPLE__
+    char path[PATH_MAX];
+    uint32_t size = sizeof(path);
+    if (_NSGetExecutablePath(path, &size) != 0)
+        path[0] = '\0';
+    return_string = getFilenameBase(std::string(path));
+#else
     return_string = getEnvironmentVariableValue("_");
     return_string = cbica::replaceString(return_string, "./", "");
     char path[PATH_MAX];
-    if (path != NULL) 
+    if (::readlink("/proc/self/exe", path, PATH_MAX) == -1)
     {
-      if (::readlink("/proc/self/exe", path, PATH_MAX) == -1) 
-      {
-        //free(path);
-        path[0] = '\0';
-      }
+      path[0] = '\0';
     }
     return_string = getFilenameBase(std::string(path));
     path[0] = '\0';
+#endif
 #endif
 
     return return_string;
@@ -1976,7 +1984,7 @@ namespace cbica
 #if WIN32
     Sleep(static_cast<unsigned int>(ms));
 #else
-    __time_t temp = static_cast<__time_t>(ms);
+    time_t temp = static_cast<time_t>(ms);
     struct timespec ts = { temp / 1000, (temp % 1000) * 1000 * 1000 };
     nanosleep(&ts, NULL);
 #endif
