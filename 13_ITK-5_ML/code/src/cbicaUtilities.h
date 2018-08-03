@@ -960,7 +960,7 @@ namespace cbica
     returnVec.resize(sizeOfReturn);
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 eng(rd()); // seed the generator
-    std::normal_distribution< TDataType > distr(); // define the range
+    std::normal_distribution< TDataType > distr{}; // define the range
 
     for (size_t i = 0; i < returnVec.size(); i++)
     {
