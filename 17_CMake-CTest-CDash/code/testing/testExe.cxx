@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
   // check every single pixel/voxel location
   for (inputImageIterator.GoToBegin(), outputImageIterator.GoToBegin();
-    !inputImageIterator.IsAtEnd(), !outputImageIterator.IsAtEnd();
+    !inputImageIterator.IsAtEnd() && !outputImageIterator.IsAtEnd();
     ++inputImageIterator, ++outputImageIterator)
   {
     if (inputImageIterator.Get() != outputImageIterator.Get())
