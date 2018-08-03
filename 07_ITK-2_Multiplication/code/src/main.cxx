@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
       return EXIT_FAILURE;
     }
 
-    std::string inputFName1 = "", inputFName2 = "", outputFName = "";
+    std::string inputFName1 = "", inputFName2 = "", inputMask2 = "", outputFName = "";
     
     inputFName1 = argv[2];
     inputFName2 = argv[3];
