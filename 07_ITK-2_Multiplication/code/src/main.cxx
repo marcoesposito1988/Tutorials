@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     im_base->SetFileName(inputFName1);
     im_base->ReadImageInformation();
 
-    itk::ImageIOBase::Pointer im_base_2 = itk::ImageIOFactory::CreateImageIO(inputFName2.c_str(),
+    itk::ImageIOBase::Pointer im_base_2 = itk::ImageIOFactory::CreateImageIO(inputFName2.c_str(), itk::ImageIOFactory::ReadMode);
     im_base_2->SetFileName(inputFName2);
     im_base_2->ReadImageInformation();
     

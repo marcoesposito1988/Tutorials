@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     im_base->SetFileName(inputFName1);
     im_base->ReadImageInformation();
 
-    itk::ImageIOBase::Pointer im_base_2 = itk::ImageIOFactory::CreateImageIO(inputFName2.c_str(),
+    itk::ImageIOBase::Pointer im_base_2 = itk::ImageIOFactory::CreateImageIO(inputFName2.c_str(), itk::ImageIOFactory::ReadMode);
     im_base_2->SetFileName(inputFName2);
     im_base_2->ReadImageInformation();
     
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     std::cout << "Doing registration...\n";
     ImageType::Pointer image_2 = ImageType::New();
     SafeReadImage<ImageType>(image_2, inputFName2);
-    registrationFilter<ImageType, MaskImageType>(image_1, image_2, mask_reader->GetOutput(),
+    registrationFilter<ImageType, MaskImageType>(image_1, image_2, mask_reader->GetOutput(), outputFName);
         
   }
   catch (itk::ExceptionObject &error)
