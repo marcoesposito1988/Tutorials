@@ -707,7 +707,7 @@ namespace cbica
       exit(EXIT_FAILURE);
     }
 #else
-    if (access(fileName.c_str(), R_OK && W_OK) != 0)
+    if (access(fileName.c_str(), R_OK & W_OK) != 0)
     {
       std::cerr << "No write permission for the specified config file.\n";
       exit(EXIT_FAILURE);

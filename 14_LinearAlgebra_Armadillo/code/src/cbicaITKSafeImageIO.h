@@ -81,9 +81,9 @@ namespace cbica
     im_base->ReadImageInformation();
 
     // perform basic sanity check
-    if (im_base->GetNumberOfDimensions() != typename TImageType::ImageDimension)
+    if (im_base->GetNumberOfDimensions() != TImageType::ImageDimension)
     {
-      std::cerr << "Image Dimension mismatch. Return image is expected to be '" << typename TImageType::ImageDimension <<
+      std::cerr << "Image Dimension mismatch. Return image is expected to be '" << TImageType::ImageDimension <<
         "'D and doesn't match the image dimension read from the input file, which is '" << im_base->GetNumberOfDimensions() << "'.\n";
       exit(EXIT_FAILURE);
     }
@@ -351,7 +351,7 @@ namespace cbica
 
     typedef itk::Image<DicomPixelType, 2> DicomImage2DType; // dicom images are always 2D
     typedef itk::ImageSeriesWriter<ExpectedImageType, DicomImage2DType> SeriesWriterType;
-    SeriesWriterType::Pointer seriesWriter = SeriesWriterType::New();
+    typename SeriesWriterType::Pointer seriesWriter = SeriesWriterType::New();
     seriesWriter->SetInput(castFilter->GetOutput());
     seriesWriter->SetImageIO(dicomIO);
     seriesWriter->SetFileNames(namesGenerator->GetOutputFileNames());
