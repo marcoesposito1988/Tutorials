@@ -6,8 +6,6 @@ PROJECT(${PROJECT_NAME})
 # Set your files and resources here
 SET( SOURCE_DIRECTORY ${PROJECT_SOURCE_DIR}/src )
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR})
-
 ADD_EXECUTABLE( Assertion ${SOURCE_DIRECTORY}/assert.cxx )
 
 ADD_EXECUTABLE( Exception ${SOURCE_DIRECTORY}/exception.cxx )
