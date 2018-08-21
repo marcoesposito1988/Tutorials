@@ -42,6 +42,10 @@ See COPYING file or https://www.cbica.upenn.edu/sbia/software/license.html
 //  static const char* cSeparators = "/";
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>	/* _NSGetExecutablePath */
+#endif
+
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -603,11 +607,19 @@ namespace cbica
       splitFileName(filename, path, return_string, ext);
       //_splitpath_s(filename, NULL, NULL, NULL, NULL, filename, NULL, NULL, NULL);
     #else
-    	//! Initialize pointers to file and user names
-    	char *filename, filename_2[FILENAME_MAX];    
-    	::readlink("/proc/self/exe", filename_2, sizeof(filename_2)-1);
-      filename = basename(filename_2);
-      return_string = std::string(filename);
+      #ifdef __APPLE__
+          char filename[PATH_MAX];
+          uint32_t size = sizeof(filename);
+          if (_NSGetExecutablePath(filename, &size) != 0)
+            filename[0] = '\0';
+          return_string = getFilenameBase(std::string(filename));
+      #else
+          //! Initialize pointers to file and user names
+          char *filename, filename_2[FILENAME_MAX];
+          ::readlink("/proc/self/exe", filename_2, sizeof(filename_2)-1);
+          filename = basename(filename_2);
+          return_string = std::string(filename);
+    #endif
     #endif
 
     filename[0] = '\0';
