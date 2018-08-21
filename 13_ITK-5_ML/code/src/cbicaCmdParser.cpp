@@ -38,6 +38,10 @@ static const char  cSeparator = '/';
 //  static const char* cSeparators = "/";
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>	/* _NSGetExecutablePath */
+#endif
+
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -291,7 +295,16 @@ namespace cbica
     filename[0] = '\0';
     //_splitpath_s(filename, NULL, NULL, NULL, NULL, filename, NULL, NULL, NULL);
 #else
-    return_string = getEnvironmentVariableValue("_");
+    #ifdef __APPLE__
+          char filename[PATH_MAX];
+          uint32_t size = sizeof(filename);
+          if (_NSGetExecutablePath(filename, &size) != 0)
+              filename[0] = '\0';
+      std::string path, ext;
+      splitFileName(filename, path, return_string, ext);
+    #else
+        return_string = getEnvironmentVariableValue("_");
+    #endif
 #endif
 
     return return_string;
