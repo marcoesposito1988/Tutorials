@@ -4,8 +4,10 @@ SET( PROJECT_NAME UnitTesting_Tutorial )
 
 
 IF( APPLE )
-# requires 'brew install libomp'
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xpreprocessor -fopenmp -lomp")
+    # requires 'brew install libomp'
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xpreprocessor -fopenmp -lomp -I/usr/local/opt/libomp/include" )
+    SET( OpenMP_CXX_LIB_NAMES "omp" )
+    SET( OpenMP_omp_LIBRARY "/usr/local/opt/libomp/lib/libomp.dylib" )
 ENDIF( APPLE )
 
 # Set project name 
