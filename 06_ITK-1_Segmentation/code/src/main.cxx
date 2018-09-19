@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   try // to catch exceptions
   {
     // basic check to see image file has been put in by the user
-    if( (argc < 2) || (argc > 2) )
+    if( argc != 3 )
     {
       std::cerr << "Usage: " << std::endl;
       echoUsage(argv[0]);
@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 
     std::string inputFName1 = "", outputFName = "";
 
-    inputFName1 = argv[2];
-    outputFName = argv[3];
+    inputFName1 = argv[1];
+    outputFName = argv[2];
 
     itk::ImageIOBase::Pointer im_base = itk::ImageIOFactory::CreateImageIO(inputFName1.c_str(), itk::ImageIOFactory::ReadMode);
     im_base->SetFileName(inputFName1);
