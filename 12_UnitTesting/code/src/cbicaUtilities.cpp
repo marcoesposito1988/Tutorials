@@ -45,12 +45,19 @@ static const char  cSeparator = '/';
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/param.h>
+#endif
+#if defined(__unix__) || defined(__unix) || defined(unix)
 #include <sys/sysinfo.h>
 #endif
 #if defined(BSD)
 #include <sys/sysctl.h>
 #endif
-
+#if defined(__APPLE__)
+#include <mach/mach.h>
+#include <mach/mach_types.h>
+#include <mach/mach_init.h>
+#include <mach/mach_host.h>
+#endif
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -2019,11 +2026,19 @@ namespace cbica
     GlobalMemoryStatusEx(&status);
     return (size_t)status.ullTotalPhys;
 
-#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
+#elif defined(__unix__) || defined(__unix) || defined(unix)
     struct sysinfo memInfo;
 
     sysinfo(&memInfo);
     return memInfo.totalram * memInfo.mem_unit;
+#elif defined(__APPLE__) && defined(__MACH__)
+      xsw_usage vmusage = {0};
+      size_t size = sizeof(vmusage);
+      if( sysctlbyname("vm.swapusage", &vmusage, &size, nullptr, 0) != 0 )
+      {
+          return -1;
+      }
+      return vmusage.xsu_total;
 #else
     return 0L;			/* Unknown OS. */
 #endif
@@ -2038,12 +2053,20 @@ namespace cbica
     GlobalMemoryStatusEx(&memInfo);
     return memInfo.ullTotalPhys - memInfo.ullAvailPageFile;
 
-#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
+#elif defined(__unix__) || defined(__unix) || defined(unix)
 
     struct sysinfo memInfo;
 
     sysinfo(&memInfo);
     return memInfo.mem_unit * (memInfo.totalram - memInfo.freeram);
+#elif defined(__APPLE__) && defined(__MACH__)
+      xsw_usage vmusage = {0};
+      size_t size = sizeof(vmusage);
+      if( sysctlbyname("vm.swapusage", &vmusage, &size, nullptr, 0) != 0 )
+      {
+          return -1;
+      }
+      return vmusage.xsu_used;
 
 #else
     return 0;
@@ -2057,7 +2080,7 @@ namespace cbica
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
     return pmc.WorkingSetSize;
 
-#elif defined(__unix__) || defined(__unix) || defined(unix) || (defined(__APPLE__) && defined(__MACH__))
+#elif defined(__unix__) || defined(__unix) || defined(unix)
     
     FILE* file = fopen("/proc/self/status", "r");
     int result = -1;
@@ -2079,6 +2102,18 @@ namespace cbica
     fclose(file);
     return static_cast< size_t >(result * 1000);
 
+#elif defined(__APPLE__) && defined(__MACH__)
+      struct task_basic_info t_info;
+      mach_msg_type_number_t t_info_count = TASK_BASIC_INFO_COUNT;
+
+      if (KERN_SUCCESS != task_info(mach_task_self(),
+                                    TASK_BASIC_INFO, (task_info_t)&t_info,
+                                    &t_info_count))
+      {
+          return -3;
+      }
+      return t_info.resident_size;
+
 #else
     return 0;
 #endif
@@ -2093,12 +2128,6 @@ namespace cbica
       sleep();
     }
 
-#if WIN32
-    Sleep(static_cast<unsigned int>(ms));
-#else
-    __time_t temp = static_cast<__time_t>(ms);
-    struct timespec ts = { temp / 1000, (temp % 1000) * 1000 * 1000 };
-    nanosleep(&ts, NULL);
-#endif
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
   }
 }
