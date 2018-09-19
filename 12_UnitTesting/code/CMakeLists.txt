@@ -2,6 +2,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 SET( PROJECT_NAME UnitTesting_Tutorial )
 
+
+IF( APPLE )
+    # requires 'brew install libomp'
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xpreprocessor -fopenmp -lomp -I/usr/local/opt/libomp/include" )
+    SET( OpenMP_CXX_LIB_NAMES "omp" )
+    SET( OpenMP_omp_LIBRARY "/usr/local/opt/libomp/lib/libomp.dylib" )
+ENDIF( APPLE )
+
 # Set project name 
 PROJECT( ${PROJECT_NAME} )
 SET(EXE_NAME "${PROJECT_NAME}" CACHE STRING "Executable name" FORCE)
