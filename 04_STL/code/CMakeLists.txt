@@ -1,5 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+SET( CMAKE_CXX_STANDARD 11 ) 
+
 # Assign a separate variable for project name
 SET( PROJECT_NAME STL_Tutorial )
 
