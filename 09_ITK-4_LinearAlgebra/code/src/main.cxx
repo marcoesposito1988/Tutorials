@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
 
     std::string inputFName1 = "", outputFName = "";
     
-    inputFName1 = argv[2];
-    outputFName = argv[3];
+    inputFName1 = argv[1];
+    outputFName = argv[2];
 
     // perform sanity check
     itk::ImageIOBase::Pointer im_base = itk::ImageIOFactory::CreateImageIO(inputFName1.c_str(), itk::ImageIOFactory::ReadMode);
