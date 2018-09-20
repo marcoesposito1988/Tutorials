@@ -152,7 +152,7 @@ void registrationFilter(typename TImageType::Pointer fixedImage,
 
 void echoUsage(const std::string &exeName)
 {
-  std::cout << exeName << " <fixedImage> <movingImage> <outputFileName> <movingImageMask>\n" <<
+  std::cout << exeName << " <fixedImage> <movingImage> <movingImageMask> <outputFileName>\n" <<
     "NOTE - Only 3D images are supported in this example.\n";
 }
 
@@ -172,10 +172,10 @@ int main(int argc, char *argv[])
     std::string inputFName1 = "", inputFName2 = "", inputMask2 = "", outputFName = "";
     bool segFlag = false, mulFlag = false, regFlag = false;
 
-    inputFName1 = argv[2];
-    inputFName2 = argv[3];
-    inputMask2 = argv[4];
-    outputFName = argv[5];
+    inputFName1 = argv[1];
+    inputFName2 = argv[2];
+    inputMask2 = argv[3];
+    outputFName = argv[4];
 
     //std::string iterations_string = argv[5];
     //outputFName = outputFName + iterations_string + ".nii";
