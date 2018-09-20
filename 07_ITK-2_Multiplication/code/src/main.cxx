@@ -103,12 +103,11 @@ int main(int argc, char *argv[])
       return EXIT_FAILURE;
     }
 
-    std::string inputFName1 = "", inputFName2 = "", inputMask2 = "", outputFName = "";
+    std::string inputFName1 = "", inputFName2 = "", outputFName = "";
     
-    inputFName1 = argv[2];
-    inputFName2 = argv[3];
-    inputMask2 = argv[4];
-    outputFName = argv[5];
+    inputFName1 = argv[1];
+    inputFName2 = argv[2];
+    outputFName = argv[3];
 
     // perform sanity check
     itk::ImageIOBase::Pointer im_base = itk::ImageIOFactory::CreateImageIO(inputFName1.c_str(), itk::ImageIOFactory::ReadMode);
